@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="#">
+    <title>Spotify App</title>
+    <link rel="icon" href= "./spoti.png" type="image/x-icon"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+   
+  </head>
+  <body style="background-color: black;">
+    <p class="title"> SONG BY ARTIST LIST PROVIDER</p>
+
+    <img class="spotify-logo" src="./spotiwords.png" >
+
+    <div class="card">
+        <div class="search">
+            <form id="form" class="form">
+                <input id="search" name="artist_input" type="text" placeholder="enter artist name">
+                <button id="button" class="searchButton"><img class="searchlogo" src="./search.png"></button>
+            </form>
+
+            <p class="tracker"> SONGS BY THE ARTIST</p>
+            <div id="result"></div>
+        </div>
+    </div>
+        
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+     <script defer src="main.js"></script>
+
+  </body>
+</html>
+
+--------------------------------------------------------------- ---------------------------------- ------------------------------------------------------------//CSS
+
+@import url('https://fonts.googleapis.com/css2?family=Gabarito&family=Young+Serif&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.title{
+    text-align: center;
+    font-family: 'Young Serif', serif;
+    font-size: 50px;
+    color: aliceblue;
+    background:linear-gradient(135deg, #45be69, #0f4e1d);
+    
+}
+.card{
+    width: 90%;
+    max-width: 470px;
+    background: linear-gradient(135deg, #066d17, #1c572d);
+    color: #fff;
+    margin: 100px auto 0;
+    border-radius: 25px;
+    padding: 40px 35px;
+    text-align: center;
+    
+}
+.searchlogo{
+    width: 50px;
+    height: 55px;
+    background: #ebfffe;
+    border-radius: 90px;
+}
+.searchButton{
+    border-radius: 90px;
+}
+
+.form{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.form input{
+    border: 0;
+    outline: 0;
+    background: #ebfffe;
+    color: #555;
+    padding: 10px 25px;
+    height: 60px;
+    border-radius: 30px;
+    flex: 1;
+    margin-right: 16px;
+    font-size: 18px;
+    ;
+}
+.spotify-logo{
+    
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    margin-bottom: -50px;
+    
+}
+.tracker{
+    margin-top: 30px;
+    font-size: 30px;
+    font-family: 'Courier New', Courier, monospace;
+    
+}
+
+#result{
+    text-align: left;
+    margin-top: 30px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------JS
+
+        const artist = document.getElementById('form');
+        const search = document.getElementById('search');
+        const songInfo = document.getElementById('result');
+
+        const api = 'https://api.lyrics.ovh';
+
+        artist.addEventListener('submit', e=> {
+            e.preventDefault();
+            inputValue = search.value.trim();
+
+            if(!inputValue){
+                alert('PLS DEBUG')
+            }
+            else{
+                searchSong(inputValue)
+            }
+        })
+        
+        async function searchSong(inputValue){
+            const Result = await fetch(`${api}/suggest/${inputValue}`)
+            const data = await Result.json();
+
+            displayData(data)
+        }
+
+        
+        function displayData(data){
+            result.innerHTML = `
+            <ul class = "song-list">
+            ${data.data.map(song => `<li>
+            <div>
+            ${song.artist.name} -${song.title}
+            <div>
+            <span data-artist="${song.artist.name}" data-songtitle"${song.title}"> </span>
+            </li>
+            
+            `).join('')
+            }
+            </ul>
+            `
+        }
+
+       
+
